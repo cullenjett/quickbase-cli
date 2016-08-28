@@ -1,0 +1,17 @@
+{
+  "name": "quickbase-cli",
+  "version": "1.0.0",
+  "description": "Command line tool for custom QuickBase development",
+  "main": "bin/qb.js",
+  "bin": {
+    "qb": "bin/qb.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cullen Jett <cullenjett@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.9.0"
+  }
+}
