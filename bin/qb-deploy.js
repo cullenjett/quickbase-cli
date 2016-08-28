@@ -1,3 +1,5 @@
 #!/usr/bin/env node
 
-console.log("hello from bin/qb-deploy.js")
+let args = require('commander').parse(process.argv).args
+
+console.log(`you called 'qb deploy' with the following args: ${args}`)

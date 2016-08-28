@@ -9,9 +9,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": "",
   "author": "Cullen Jett <cullenjett@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "request": "^2.74.0"
   }
 }
