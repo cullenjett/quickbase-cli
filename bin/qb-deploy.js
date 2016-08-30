@@ -2,27 +2,19 @@
 
 let ApiClient = require('../lib/api')
 let args = require('commander').parse(process.argv).args
+let sourceDirectory = args[0]
 let fs = require('fs')
 let path = require('path')
 
-let sourceDirectory = args[0]
 let config = {
   username: 'cullenjett',
   realm: 'ais',
-  dbid: 'bjzrx8ciy'
+  dbid: 'bjzrx8ciy',
+  appName: 'quickbase-cli'
 }
 let api = new ApiClient(config)
 
-const deploy = (sourceDir) => {
-  let isRelativePath = sourceDir.charAt(0) == '.'
-  let source
-
-  if (isRelativePath) {
-    source = path.join(process.cwd(), sourceDir)
-  } else {
-    source = sourceDir
-  }
-
+const parseFiles = (source) => {
   let fileNames = fs.readdirSync(source)
 
   let indexHtml = fileNames.find(fileName => path.extname(fileName) == '.html')
@@ -32,14 +24,38 @@ const deploy = (sourceDir) => {
   let jsFileName = path.basename(mainJs)
   let cssFileName = path.basename(mainCss)
 
-  let htmlText = fs.readFileSync(path.join(sourceDir, indexHtml), 'utf-8')
-    .replace(new RegExp(jsFileName, 'g'), 'SUCCESS.JS')
-    .replace(new RegExp(cssFileName, 'g'), 'SUCCESS.CSS')
+  return {indexHtml, jsFileName, cssFileName}
+}
 
-  let pageName = 'quickbase-cli.html'
-  return api.uploadPage(htmlText, pageName).then(res => {
-    console.log('RES:', res)
-    console.log("DONE")
+const generateCustomPageUrl = (fileName) => {
+  return `https://${config.realm}.quickbase.com/db/${config.dbid}?a=dbpage&pagename=${config.appName}-${fileName}`
+}
+
+const deploy = (sourceDir) => {
+  let isRelativePath = sourceDir.charAt(0) == '.'
+  let source = null
+
+  if (isRelativePath) {
+    source = path.join(process.cwd(), sourceDir)
+  } else {
+    source = sourceDir
+  }
+
+  let {indexHtml, jsFileName, cssFileName} = parseFiles(source)
+  let htmlText = fs.readFileSync(path.join(source, indexHtml), 'utf-8')
+    .replace(new RegExp(jsFileName, 'g'), generateCustomPageUrl(jsFileName))
+    .replace(new RegExp(cssFileName, 'g'), generateCustomPageUrl(cssFileName))
+
+  let jsText = fs.readFileSync(path.join(source, jsFileName), 'utf-8')
+  let cssText = fs.readFileSync(path.join(source, cssFileName), 'utf-8')
+
+  let uploadAssets = []
+  uploadAssets.push(api.uploadPage(htmlText, `${config.appName}-${indexHtml}`))
+  uploadAssets.push(api.uploadPage(jsText, `${config.appName}-${jsFileName}`))
+  uploadAssets.push(api.uploadPage(cssText, `${config.appName}-${cssFileName}`))
+
+  return Promise.all(uploadAssets).then(res => {
+    console.log("RES:", res)
   })
 }
 
