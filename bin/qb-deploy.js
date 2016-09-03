@@ -2,7 +2,7 @@
 
 let ApiClient = require('../lib/api')
 let args = require('commander').parse(process.argv).args
-let sourceDirectory = args[0]
+let sourceArg = args[0]
 let fs = require('fs')
 let path = require('path')
 
@@ -14,49 +14,46 @@ let config = {
 }
 let api = new ApiClient(config)
 
-const parseFiles = (source) => {
-  let fileNames = fs.readdirSync(source)
+deploy(sourceArg)
 
-  let indexHtml = fileNames.find(fileName => path.extname(fileName) == '.html')
-  let mainJs = fileNames.find(fileName => path.extname(fileName) == '.js')
-  let mainCss = fileNames.find(fileName => path.extname(fileName) == '.css')
+function deploy(source='.') {
+  let isFile = fs.statSync(source).isFile()
 
-  let jsFileName = path.basename(mainJs)
-  let cssFileName = path.basename(mainCss)
-
-  return {indexHtml, jsFileName, cssFileName}
-}
-
-const generateCustomPageUrl = (fileName) => {
-  return `https://${config.realm}.quickbase.com/db/${config.dbid}?a=dbpage&pagename=${config.appName}-${fileName}`
-}
-
-const deploy = (sourceDir) => {
-  let isRelativePath = sourceDir.charAt(0) == '.'
-  let source = null
-
-  if (isRelativePath) {
-    source = path.join(process.cwd(), sourceDir)
-  } else {
-    source = sourceDir
+  if (isFile) {
+    return uploadFileToQuickbase(source).then((res) => console.log(res))
   }
 
-  let {indexHtml, jsFileName, cssFileName} = parseFiles(source)
-  let htmlText = fs.readFileSync(path.join(source, indexHtml), 'utf-8')
-    .replace(new RegExp(jsFileName, 'g'), generateCustomPageUrl(jsFileName))
-    .replace(new RegExp(cssFileName, 'g'), generateCustomPageUrl(cssFileName))
+  if (!isFile) {
+    let allFiles = fs.readdirSync(source)
+    let htmlFiles = allFiles.filter(file => path.extname(file) == '.html').map(file => path.join(source, file))
+    let assetFiles = allFiles.filter(file => path.extname(file) != '.html').map(file => path.join(source, file))
 
-  let jsText = fs.readFileSync(path.join(source, jsFileName), 'utf-8')
-  let cssText = fs.readFileSync(path.join(source, cssFileName), 'utf-8')
+    let uploadHtmlFiles = htmlFiles.map(htmlFile => {
+      let htmlContents = fs.readFileSync(htmlFile, 'utf-8')
+      assetFiles.forEach(assetFile => {
+        htmlContents = htmlContents.replace(new RegExp(assetFile, 'g'), generateCustomPageUrl(assetFile))
+      })
+      return uploadToQuickbase(htmlFile, htmlContents)
+    })
 
-  let uploadAssets = []
-  uploadAssets.push(api.uploadPage(htmlText, `${config.appName}-${indexHtml}`))
-  uploadAssets.push(api.uploadPage(jsText, `${config.appName}-${jsFileName}`))
-  uploadAssets.push(api.uploadPage(cssText, `${config.appName}-${cssFileName}`))
+    let uploadAssetFiles = assetFiles.map(assetFile => uploadToQuickbase(assetFile))
 
-  return Promise.all(uploadAssets).then(res => {
-    console.log("RES:", res)
-  })
+    let uploadAllFiles = [...uploadHtmlFiles, ...uploadAssetFiles]
+
+    return Promise.all(uploadAllFiles).then((res) => console.log("DONE:", res))
+  }
 }
 
-deploy(sourceDirectory)
+function uploadToQuickbase(file, fileContents) {
+  let fileName = path.basename(file)
+
+  if (!fileContents) {
+    fileContents = fs.readFileSync(file, 'utf-8')
+  }
+
+  return api.uploadPage(`${config.appName}-${fileName}`, fileContents)
+}
+
+function generateCustomPageUrl(fileName) {
+  return `https://${config.realm}.quickbase.com/db/${config.dbid}?a=dbpage&pagename=${config.appName}-${fileName}`
+}
