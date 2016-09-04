@@ -6,12 +6,7 @@ let sourceArg = args[0]
 let fs = require('fs')
 let path = require('path')
 
-let config = {
-  username: 'cullenjett',
-  realm: 'ais',
-  dbid: 'bjzrx8ciy',
-  appName: 'quickbase-cli'
-}
+let config = require(`${process.cwd()}/quickbase-cli.config.js`)
 let api = new ApiClient(config)
 
 deploy(sourceArg)
@@ -20,7 +15,7 @@ function deploy(source='.') {
   let isFile = fs.statSync(source).isFile()
 
   if (isFile) {
-    return uploadFileToQuickbase(source).then((res) => console.log(res))
+    return uploadToQuickbase(source).then((res) => console.log('DONE:', res))
   }
 
   if (!isFile) {
