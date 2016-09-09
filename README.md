@@ -1,4 +1,4 @@
-# QuickBase CLI
+# QuickBase CLI (IN DEVELOPMENT)
 
 Simple command line tool for uploading local files to a QuickBase application.
 
@@ -11,8 +11,12 @@ npm install -g quickbase-cli
 
 ### Usage
 
+#### qb new
+#### qb init
+#### qb deploy
+
 ```bash
-qb deploy <directory>
+qb deploy <file path or directory>
 ```
 
-This will upload the files inside <directory> to the QuickBase application configured in the `.quickbase-cli` file at the root of the application.
+This will upload the files inside <file path or directory> to the QuickBase application configured in the `quickbase-cli.config.js` file at the root of the application.

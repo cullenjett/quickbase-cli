@@ -2,11 +2,13 @@
 
 let ApiClient = require('../lib/api')
 let args = require('commander').parse(process.argv).args
-let sourceArg = args[0]
 let fs = require('fs')
 let path = require('path')
+let sourceArg = args[0] || '.'
 
-let config = require(`${process.cwd()}/quickbase-cli.config.js`)
+let configPath = require('../lib/find-config')(sourceArg)
+let config = require(configPath)
+
 let api = new ApiClient(config)
 
 deploy(sourceArg)
@@ -23,20 +25,26 @@ function deploy(source='.') {
     let htmlFiles = allFiles.filter(file => path.extname(file) == '.html').map(file => path.join(source, file))
     let assetFiles = allFiles.filter(file => path.extname(file) != '.html').map(file => path.join(source, file))
 
-    let uploadHtmlFiles = htmlFiles.map(htmlFile => {
-      let htmlContents = fs.readFileSync(htmlFile, 'utf-8')
-      assetFiles.forEach(assetFile => {
-        htmlContents = htmlContents.replace(new RegExp(assetFile, 'g'), generateCustomPageUrl(assetFile))
-      })
-      return uploadToQuickbase(htmlFile, htmlContents)
-    })
-
+    let uploadHtmlFiles = replaceUrlsAndUpload(htmlFiles, assetFiles)
     let uploadAssetFiles = assetFiles.map(assetFile => uploadToQuickbase(assetFile))
-
-    let uploadAllFiles = [...uploadHtmlFiles, ...uploadAssetFiles]
+    let uploadAllFiles = uploadHtmlFiles.concat(uploadAssetFiles)
 
     return Promise.all(uploadAllFiles).then((res) => console.log("DONE:", res))
   }
+}
+
+function generateCustomPageUrl(fileName) {
+  return `https://${config.realm}.quickbase.com/db/${config.dbid}?a=dbpage&pagename=${config.appName}-${fileName}`
+}
+
+function replaceUrlsAndUpload(htmlFiles, assetFiles) {
+  return htmlFiles.map(htmlFile => {
+    let htmlContents = fs.readFileSync(htmlFile, 'utf-8')
+    assetFiles.forEach(assetFile => {
+      htmlContents = htmlContents.replace(new RegExp(assetFile, 'g'), generateCustomPageUrl(assetFile))
+    })
+    return uploadToQuickbase(htmlFile, htmlContents)
+  })
 }
 
 function uploadToQuickbase(file, fileContents) {
@@ -47,8 +55,4 @@ function uploadToQuickbase(file, fileContents) {
   }
 
   return api.uploadPage(`${config.appName}-${fileName}`, fileContents)
-}
-
-function generateCustomPageUrl(fileName) {
-  return `https://${config.realm}.quickbase.com/db/${config.dbid}?a=dbpage&pagename=${config.appName}-${fileName}`
 }
