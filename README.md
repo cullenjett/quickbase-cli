@@ -19,4 +19,4 @@ npm install -g quickbase-cli
 qb deploy <file path or directory>
 ```
 
-This will upload the file(s) at <file path or directory> to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. All html files will run through a regex to replace asset file includes (ie <script src="bundle.js"></script> and/or <link href="bundle.css"/>) with their new QuickBase urls.
+This will upload the file(s) at <file path or directory> to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. All html files will run through a regex to replace asset file includes (ie `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls.
