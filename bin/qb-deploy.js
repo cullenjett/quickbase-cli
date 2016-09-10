@@ -39,8 +39,11 @@ function generateCustomPageUrl(fileName) {
 
 function replaceUrlsAndUpload(htmlFiles, assetFiles) {
   return htmlFiles.map(htmlFile => {
+    console.log(htmlFile)
     let htmlContents = fs.readFileSync(htmlFile, 'utf-8')
     assetFiles.forEach(assetFile => {
+      assetFile = path.basename(assetFile)
+      console.log(assetFile)
       htmlContents = htmlContents.replace(new RegExp(assetFile, 'g'), generateCustomPageUrl(assetFile))
     })
     return uploadToQuickbase(htmlFile, htmlContents)
