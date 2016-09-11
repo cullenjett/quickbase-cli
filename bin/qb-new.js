@@ -14,10 +14,6 @@ if (!template) {
 qbNew(template, projectName)
 
 function qbNew(template, projectName) {
-  if (!template.match("/")) {
-    template = `AdvantageIntegratedSolutions/${template}`
-  }
-
   gitClone(template, projectName).then(res => {
     console.log(`New project created.`)
   }).catch(err => console.error(err))
