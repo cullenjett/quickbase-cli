@@ -38,7 +38,7 @@ function qbInit() {
   inquirer.prompt(QUESTIONS).then(answers => {
     return generateConfig(answers)
   }).then(() => {
-    console.log('DONE')
+    console.log('quickbase-cli.config.js generated successfuly.')
   }).catch(err => {
     console.error(err)
   })

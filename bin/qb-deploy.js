@@ -11,9 +11,9 @@ let config = require(configPath)
 
 let api = new ApiClient(config)
 
-deploy(sourceArg)
+qbDeploy(sourceArg)
 
-function deploy(source='.') {
+function qbDeploy(source='.') {
   let isFile = fs.statSync(source).isFile()
 
   if (isFile) {
