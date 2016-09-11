@@ -17,7 +17,9 @@ function qbDeploy(source='.') {
   let isFile = fs.statSync(source).isFile()
 
   if (isFile) {
-    return uploadToQuickbase(source).then((res) => console.log('DONE:', res))
+    return uploadToQuickbase(source)
+      .then(res => console.log("Successfully uploaded to QuickBase", res))
+      .catch(err => console.error(err))
   }
 
   if (!isFile) {
@@ -29,7 +31,9 @@ function qbDeploy(source='.') {
     let uploadAssetFiles = assetFiles.map(assetFile => uploadToQuickbase(assetFile))
     let uploadAllFiles = uploadHtmlFiles.concat(uploadAssetFiles)
 
-    return Promise.all(uploadAllFiles).then((res) => console.log("DONE:", res))
+    return Promise.all(uploadAllFiles)
+      .then(res => console.log("Successfully uploaded to QuickBase", res))
+      .catch(err => console.error(err))
   }
 }
 
@@ -39,13 +43,14 @@ function generateCustomPageUrl(fileName) {
 
 function replaceUrlsAndUpload(htmlFiles, assetFiles) {
   return htmlFiles.map(htmlFile => {
-    console.log(htmlFile)
     let htmlContents = fs.readFileSync(htmlFile, 'utf-8')
+
     assetFiles.forEach(assetFile => {
       assetFile = path.basename(assetFile)
-      console.log(assetFile)
+
       htmlContents = htmlContents.replace(new RegExp(assetFile, 'g'), generateCustomPageUrl(assetFile))
     })
+
     return uploadToQuickbase(htmlFile, htmlContents)
   })
 }
