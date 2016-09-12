@@ -14,6 +14,9 @@ npm install -g quickbase-cli
 #### qb new
 ```bash
 qb new <github-repo> <project-name>
+
+# example
+qb new cullenjett/quickbase-template myAwesomeProject
 ```
 
 This command will start a new application by cloning a Github repo from `<github-repo>` (to be formatted as "github username/repo name") and generate the project at `./<project-name>`. Both `<github-repo>` and `<project-name>` are required.
@@ -28,6 +31,9 @@ Initialize an existing app with quickbase-cli functionality. Respond to the prom
 #### qb deploy
 ```bash
 qb deploy <file path or directory>
+
+# example
+qb deploy dist/
 ```
 
 This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. All html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files.
@@ -36,4 +42,4 @@ This will upload the file(s) at `<file path or directory>` to the QuickBase appl
 
 * Instead of exposing your password for the `quickbase-cli.config.js` file you can rely on an environment variable called `QUICKBASE_CLI_PASSWORD`. If you have that variable defined and leave the `password` empty when prompted the `qb deploy` command will use it instead. Always practice safe passwords.
 
-* Moves are being made to add cool shit like global defaults for `quickbase-cli.config.js`, auto-deploy on file changes, and awesome starter templates. They're not out yet, so for now you're on your own.
+* Moves are being made to add cool shit like global defaults, auto-deploy on file changes, and awesome starter templates. They're not out yet, so for now you're on your own.
