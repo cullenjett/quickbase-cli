@@ -18,7 +18,7 @@ function qbDeploy(source='.') {
 
   if (isFile) {
     return uploadToQuickbase(source)
-      .then(res => console.log("Successfully uploaded to QuickBase", res))
+      .then(res => console.log("Successfully uploaded to QuickBase"))
       .catch(err => console.error(err))
   }
 
@@ -32,7 +32,7 @@ function qbDeploy(source='.') {
     let uploadAllFiles = uploadHtmlFiles.concat(uploadAssetFiles)
 
     return Promise.all(uploadAllFiles)
-      .then(res => console.log("Successfully uploaded to QuickBase", res))
+      .then(res => console.log("Successfully uploaded to QuickBase"))
       .catch(err => console.error(err))
   }
 }
