@@ -7,9 +7,9 @@
     "qb": "bin/qb.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"QuickBase CLI has failed you. I'm sorry.\" && exit 1"
   },
-  "repository": "",
+  "repository": "https://github.com/cullenjett/quickbase-cli",
   "author": "Cullen Jett <cullenjett@gmail.com>",
   "license": "MIT",
   "dependencies": {
