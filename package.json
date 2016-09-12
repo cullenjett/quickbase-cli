@@ -11,6 +11,12 @@
   },
   "repository": "https://github.com/cullenjett/quickbase-cli",
   "author": "Cullen Jett <cullenjett@gmail.com>",
+  "keywords": [
+    "QuickBase",
+    "command line tool",
+    "qb",
+    "cli"
+  ],
   "license": "MIT",
   "dependencies": {
     "commander": "^2.9.0",
