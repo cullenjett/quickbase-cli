@@ -1,6 +1,6 @@
 {
   "name": "quickbase-cli",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Command line tool for custom QuickBase development",
   "main": "bin/qb.js",
   "bin": {
