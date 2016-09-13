@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// TODO: confirm files w/user before uploading
+
 let ApiClient = require('../lib/api')
 let args = require('commander').parse(process.argv).args
 let fs = require('fs')

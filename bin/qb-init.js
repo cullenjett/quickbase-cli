@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// TODO: application token
+// better question text
+
 let fs = require('fs')
 let generateConfig = require('../lib/generate-config')
 let inquirer = require('inquirer')
@@ -13,7 +16,7 @@ const QUESTIONS = [
   {
     type: 'password',
     name: 'password',
-    message: 'What is your QuickBase password? Leave blank to use the GULPPASSWORD env variable.'
+    message: 'What is your QuickBase password? Leave blank to use the QUICKBASE_CLI_PASSWORD env variable.'
   },
   {
     type: 'input',
