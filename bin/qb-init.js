@@ -11,22 +11,27 @@ const QUESTIONS = [
   {
     type: 'input',
     name: 'username',
-    message: 'What is your QuickBase username?'
+    message: 'QuickBase username?'
   },
   {
     type: 'password',
     name: 'password',
-    message: 'What is your QuickBase password? Leave blank to use the QUICKBASE_CLI_PASSWORD env variable.'
+    message: 'QuickBase password? (Leave blank to use the QUICKBASE_CLI_PASSWORD env variable)'
   },
   {
     type: 'input',
     name: 'dbid',
-    message: 'What is the main DBID for the QuickBase application?'
+    message: 'Main DBID for the QuickBase application?'
   },
   {
     type: 'input',
     name: 'realm',
-    message: 'What is the QuickBase realm?'
+    message: 'QuickBase realm?'
+  },
+  {
+    type: 'input',
+    name: 'appToken',
+    message: 'QuickBase application token?'
   },
   {
     type: 'input',
