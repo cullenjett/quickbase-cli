@@ -23,7 +23,7 @@ qbDeploy(sourceArg)
 if (program.watch) {
   chokidar.watch(sourceArg, {}).on('change', (fileName) => {
     console.log(`\nChange detected in ${fileName}. Deploying...`)
-    qbDeploy(fileName)
+    qbDeploy(sourceArg)
   })
 }
 
