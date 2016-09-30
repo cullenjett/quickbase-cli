@@ -2,7 +2,6 @@
 
 // TODO:
 // confirm files w/user before uploading?
-// display list of uploaded files?
 
 let ApiClient = require('../lib/api')
 let fs = require('fs')
@@ -24,7 +23,7 @@ qbDeploy(sourceArg)
 if (program.watch) {
   chokidar.watch(sourceArg, {}).on('change', (fileName) => {
     console.log(`\nChange detected in ${fileName}. Deploying...`)
-    qbDeploy(sourceArg)
+    qbDeploy(fileName)
   })
 }
 
@@ -33,7 +32,7 @@ function qbDeploy(source) {
 
   if (isFile) {
     return uploadToQuickbase(source)
-      .then(res => console.log("Successfully uploaded to QuickBase"))
+      .then(res => console.log(`Successfully uploaded to QuickBase:\n\t${source}`))
       .catch(err => console.error(err))
   }
 
@@ -47,7 +46,7 @@ function qbDeploy(source) {
     let uploadAllFiles = uploadHtmlFiles.concat(uploadAssetFiles)
 
     return Promise.all(uploadAllFiles)
-      .then(res => console.log("Successfully uploaded to QuickBase"))
+      .then(res => console.log(`Successfully uploaded to QuickBase:\n\t${allFiles.join("\n\t")}`))
       .catch(err => console.error(err))
   }
 }
