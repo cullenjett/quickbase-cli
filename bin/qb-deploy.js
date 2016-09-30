@@ -1,21 +1,34 @@
 #!/usr/bin/env node
 
-// TODO: confirm files w/user before uploading
+// TODO:
+// confirm files w/user before uploading?
+// display list of uploaded files?
 
 let ApiClient = require('../lib/api')
-let args = require('commander').parse(process.argv).args
 let fs = require('fs')
 let path = require('path')
-let sourceArg = args[0] || '.'
+let program = require('commander')
+let chokidar = require('chokidar')
 
+program
+  .option('-w, --watch', 'deploy files on change')
+  .parse(process.argv)
+
+let sourceArg = program.args[0] || '.'
 let configPath = require('../lib/find-config')(sourceArg)
 let config = require(configPath)
-
 let api = new ApiClient(config)
 
 qbDeploy(sourceArg)
 
-function qbDeploy(source='.') {
+if (program.watch) {
+  chokidar.watch(sourceArg, {}).on('change', (fileName) => {
+    console.log(`\nChange detected in ${fileName}. Deploying...`)
+    qbDeploy(sourceArg)
+  })
+}
+
+function qbDeploy(source) {
   let isFile = fs.statSync(source).isFile()
 
   if (isFile) {

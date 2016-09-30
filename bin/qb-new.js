@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 // TODO: This needs to do something other than call 'git clone'...
-// rm -rf .git/
-// prompt user if no quickbase-cli.config.js file is found
-// default github username
+// rm -rf .git/?
+// prompt user if no quickbase-cli.config.js file is found?
+// default github username/repo? (global .qbcli config file a la .npmrc)?
 
 let args = require('commander').parse(process.argv).args
 let gitClone = require('../lib/git-clone')

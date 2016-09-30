@@ -10,6 +10,7 @@ npm install -g quickbase-cli
 ```
 
 ### Usage
+There are three commands available for quickbase-cli:
 
 #### qb new
 ```bash
@@ -19,7 +20,7 @@ qb new <github-repo> <project-name>
 qb new cullenjett/quickbase-template myAwesomeProject
 ```
 
-This command will start a new application by cloning a Github repo from `<github-repo>` (to be formatted as "github username/repo name") and generate the project at `./<project-name>`. Both `<github-repo>` and `<project-name>` are required.
+This command will start a new application by cloning a Github repo from `<github-repo>` (formatted as "github username/repo name") and generate the project at `./<project-name>`. Both `<github-repo>` and `<project-name>` are required.
 
 For now this is only a wrapper around `git clone`. After you pull down a repo you will need to run `qb init` if the app doesn't have a `quickbase-cli.config.js` file in it already.
 
@@ -32,13 +33,15 @@ Initialize an existing app with quickbase-cli functionality. Respond to the prom
 
 #### qb deploy
 ```bash
-qb deploy <file path or directory>
+qb deploy [options] <file path or directory>
 
 # example
-qb deploy dist/
+qb deploy -w dist/
 ```
 
-This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. All html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files.
+This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. There is one optional flag that can be passed, `-w` (or `--watch`) that will set up a watcher on `<file path or directory>` and deploy to QuickBase on changes.
+
+All html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files.
 
 ### Notes
 

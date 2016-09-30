@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-// TODO: application token
-// better question text
-
 let fs = require('fs')
 let generateConfig = require('../lib/generate-config')
 let inquirer = require('inquirer')
