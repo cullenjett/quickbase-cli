@@ -1,4 +1,5 @@
 # QuickBase CLI
+[![npm version](https://badge.fury.io/js/quickbase-cli.svg)](https://badge.fury.io/js/quickbase-cli)
 
 Simple command line tool for uploading local files to a QuickBase application.
 
@@ -47,4 +48,4 @@ All html files will run through a regex to replace asset file includes (i.e. `<s
 
 * Instead of exposing your password for the `quickbase-cli.config.js` file you can rely on an environment variable called `QUICKBASE_CLI_PASSWORD`. If you have that variable defined and leave the `password` empty when prompted the `qb deploy` command will use it instead. Always practice safe passwords.
 
-* Moves are being made to add cool shit like global defaults, auto-deploy on file changes, and awesome starter templates. They're not out yet, so for now you're on your own.
+* Moves are being made to add cool shit like global defaults, awesome starter templates, and pulling down existing code files from QuickBase. They're not out yet, so for now you're on your own.
