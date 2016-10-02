@@ -11,19 +11,9 @@ npm install -g quickbase-cli
 ```
 
 ### Usage
+quickbase-cli can be used on it's own for basic QuickBase code pages, or in conjunction with modern cli tools (angular cli, create-react-app, vue cli, etc.) for an improved QuickBase development workflow.
+
 There are three commands available for quickbase-cli:
-
-#### qb new
-```bash
-qb new <github-repo> <project-name>
-
-# example
-qb new cullenjett/quickbase-template myAwesomeProject
-```
-
-This command will start a new application by cloning a Github repo from `<github-repo>` (formatted as "github username/repo name") and generate the project at `./<project-name>`. **Both `<github-repo>` and `<project-name>` are required.**
-
-For now this is only a wrapper around `git clone`. After you pull down a repo you will need to run `qb init` if the app doesn't have a `quickbase-cli.config.js` file in it already.
 
 #### qb init
 ```bash
@@ -40,9 +30,22 @@ qb deploy [options] <file path or directory>
 qb deploy -w dist/
 ```
 
-This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. There is one optional flag that can be passed, `-w` (or `--watch`) that will set up a watcher on `<file path or directory>` and deploy that file to QuickBase on change. **If no `<file path or directory>` is given then the current directory will be deployed.**
+This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. There is one optional flag that can be passed, `-w` (or `--watch`) that will set up a watcher on `<file path or directory>` and deploy the file(s) to QuickBase on change. **If no `<file path or directory>` is given then the current directory will be deployed.**
 
 All html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files.
+
+#### qb new
+```bash
+qb new <github-repo> <project-name>
+
+# example
+qb new cullenjett/quickbase-template myAwesomeProject
+```
+
+This command will start a new application by cloning a Github repo from `<github-repo>` (formatted as "github username/repo name") and generate the project at `./<project-name>`. **Both `<github-repo>` and `<project-name>` are required.**
+
+For now this is only a wrapper around `git clone`. After you pull down a repo you will need to run `qb init` if the app doesn't have a `quickbase-cli.config.js` file in it already. The end goal is to have have starter-template repos available for quick and easy kick off.
+
 
 ### Notes
 

@@ -7,7 +7,7 @@ let ApiClient = require('../lib/api')
 let fs = require('fs')
 let path = require('path')
 let program = require('commander')
-let chokidar = require('chokidar')
+let watch = require('chokidar').watch
 
 program
   .option('-w, --watch', 'deploy files on change')
@@ -21,7 +21,7 @@ let api = new ApiClient(config)
 qbDeploy(sourceArg)
 
 if (program.watch) {
-  chokidar.watch(sourceArg, {}).on('change', (fileName) => {
+  watch(sourceArg, {}).on('change', (fileName) => {
     console.log(`\nChange detected in ${fileName}. Deploying...`)
     qbDeploy(sourceArg)
   })
