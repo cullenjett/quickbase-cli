@@ -18,6 +18,8 @@ let configPath = require('../lib/find-config')(sourceArg)
 let config = require(configPath)
 let api = new ApiClient(config)
 
+const CONFIG_FILE_NAME = 'quickbase-cli.config.js'
+
 qbDeploy(sourceArg)
 
 if (program.watch) {
@@ -37,7 +39,7 @@ function qbDeploy(source) {
   }
 
   if (!isFile) {
-    let allFiles = fs.readdirSync(source)
+    let allFiles = fs.readdirSync(source).filter(file => file.charAt(0) != '.' && file != CONFIG_FILE_NAME)
     let htmlFiles = allFiles.filter(file => path.extname(file) == '.html').map(file => path.join(source, file))
     let assetFiles = allFiles.filter(file => path.extname(file) != '.html').map(file => path.join(source, file))
 

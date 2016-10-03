@@ -44,7 +44,7 @@ qb new cullenjett/quickbase-template myAwesomeProject
 
 This command will start a new application by cloning a Github repo from `<github-repo>` (formatted as "github username/repo name") and generate the project at `./<project-name>`. **Both `<github-repo>` and `<project-name>` are required.**
 
-For now this is only a wrapper around `git clone`. After you pull down a repo you will need to run `qb init` if the app doesn't have a `quickbase-cli.config.js` file in it already. The end goal is to have have starter-template repos available for quick and easy kick off.
+For now this is only a wrapper around `git clone`. After you pull down a repo you will need to run `qb init` if the app doesn't have a `quickbase-cli.config.js` file in it already. The end goal is to have starter-template repos available for quick and easy kick off.
 
 
 ### Notes
