@@ -32,7 +32,9 @@ qb deploy -w dist/
 
 This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. There is one optional flag that can be passed, `-w` (or `--watch`) that will set up a watcher on `<file path or directory>` and deploy the file(s) to QuickBase on change. **If no `<file path or directory>` is given then the current directory will be deployed.**
 
-All html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files.
+If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls. 
+
+In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files.
 
 #### qb new
 ```bash
