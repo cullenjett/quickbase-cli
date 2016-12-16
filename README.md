@@ -14,6 +14,9 @@ npm install -g quickbase-cli
 quickbase-cli can be used on it's own for basic QuickBase code pages, or in conjunction with modern cli tools (angular cli, create-react-app, vue cli, etc.) for an improved QuickBase development workflow.
 
 There are three commands available for quickbase-cli:
+- qb init
+- qb deploy
+- qb new
 
 #### qb init
 ```bash
@@ -27,14 +30,15 @@ Initialize an existing app with quickbase-cli functionality. Respond to the prom
 qb deploy [options] <file path or directory>
 
 # example
-qb deploy -w dist/
+qb deploy -x dist/
+qb deploy -w app/index.js
 ```
 
-This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. There is one optional flag that can be passed, `-w` (or `--watch`) that will set up a watcher on `<file path or directory>` and deploy the file(s) to QuickBase on change. **If no `<file path or directory>` is given then the current directory will be deployed.**
+This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files. **If no `<file path or directory>` is given then the current directory will be deployed.**
 
-If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls. 
-
-In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files.
+There are two optional flags that can be passed to qb deploy:
+- `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change.
+- '-x' (or '--replace'): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls.
 
 #### qb new
 ```bash
