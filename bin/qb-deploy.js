@@ -11,6 +11,7 @@ let watch = require('chokidar').watch
 
 program
   .option('-w, --watch', 'deploy files on change')
+  .option('-x --replace', 'replace css and js file paths inside html file with their QuickBase url')
   .parse(process.argv)
 
 let sourceArg = program.args[0] || '.'
@@ -23,6 +24,8 @@ const CONFIG_FILE_NAME = 'quickbase-cli.config.js'
 qbDeploy(sourceArg)
 
 if (program.watch) {
+  console.log(`Watching for file changes in ${sourceArg}`)
+
   watch(sourceArg, {}).on('change', (fileName) => {
     console.log(`\nChange detected in ${fileName}. Deploying...`)
     qbDeploy(sourceArg)
@@ -43,7 +46,9 @@ function qbDeploy(source) {
     let htmlFiles = allFiles.filter(file => path.extname(file) == '.html').map(file => path.join(source, file))
     let assetFiles = allFiles.filter(file => path.extname(file) != '.html').map(file => path.join(source, file))
 
-    let uploadHtmlFiles = replaceUrlsAndUpload(htmlFiles, assetFiles)
+    let uploadHtmlFiles = program.replace
+      ? replaceUrlsAndUpload(htmlFiles, assetFiles)
+      : htmlFiles.map(htmlFile => uploadToQuickbase(htmlFile))
     let uploadAssetFiles = assetFiles.map(assetFile => uploadToQuickbase(assetFile))
     let uploadAllFiles = uploadHtmlFiles.concat(uploadAssetFiles)
 
@@ -63,6 +68,7 @@ function replaceUrlsAndUpload(htmlFiles, assetFiles) {
 
     assetFiles.forEach(assetFile => {
       assetFile = path.basename(assetFile)
+      assetFileTagRegExp =
 
       htmlContents = htmlContents.replace(new RegExp(assetFile, 'g'), generateCustomPageUrl(assetFile))
     })
