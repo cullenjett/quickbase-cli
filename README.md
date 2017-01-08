@@ -23,22 +23,22 @@ There are three commands available for quickbase-cli:
 qb init
 ```
 
-Initialize an existing app with quickbase-cli functionality. Respond to the prompts to create a `quickbase-cli.config.js` file, which is later used during the `qb deploy` command. Run this command from the root of your application, as the file will be placed wherever the command is run.
+Initialize an existing app with quickbase-cli functionality. Respond to the prompts to create a `quickbase-cli.config.js` file, which is later used during the `qb deploy` command. Run this command from the root of your application, as the file will be placed wherever the command is run. See the [Notes](#notes) below for an alternative for entering your password as plain text.
 
 #### qb deploy
 ```bash
 qb deploy [options] <file path or directory>
 
 # example
-qb deploy -x dist/
 qb deploy -w app/index.js
+qb deploy -x dist/
 ```
 
-This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files. **If no `<file path or directory>` is given then the current directory will be deployed.**
+This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files (ex: 'my-app-name-bundle.js', 'my-app-name-index.html'). **If no `<file path or directory>` is given then the current directory will be deployed.**
 
 There are two optional flags that can be passed to qb deploy:
 - `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change.
-- '-x' (or '--replace'): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls.
+- `-x` (or `--replace`): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls.
 
 #### qb new
 ```bash
