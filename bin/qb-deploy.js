@@ -58,8 +58,21 @@ function qbDeploy(source) {
   }
 }
 
-function generateCustomPageUrl(fileName) {
-  return `https://${config.realm}.quickbase.com/db/${config.dbid}?a=dbpage&pagename=${config.appName}-${fileName}`
+function uploadToQuickbase(file, fileContents) {
+  let fileName = path.basename(file)
+  let codePageName
+
+  if (!fileContents) {
+    fileContents = fs.readFileSync(file, 'utf-8')
+  }
+
+  if (config.appName) {
+    codePageName = `${config.appName}-${fileName}`
+  } else {
+    codePageName = fileName
+  }
+
+  return api.uploadPage(codePageName, fileContents)
 }
 
 function replaceUrlsAndUpload(htmlFiles, assetFiles) {
@@ -77,19 +90,6 @@ function replaceUrlsAndUpload(htmlFiles, assetFiles) {
   })
 }
 
-function uploadToQuickbase(file, fileContents) {
-  let fileName = path.basename(file)
-  let codePageName
-
-  if (!fileContents) {
-    fileContents = fs.readFileSync(file, 'utf-8')
-  }
-
-  if (config.appName) {
-    codePageName = `${config.appName}-${fileName}`
-  } else {
-    codePageName = fileName
-  }
-
-  return api.uploadPage(codePageName, fileContents)
+function generateCustomPageUrl(fileName) {
+  return `https://${config.realm}.quickbase.com/db/${config.dbid}?a=dbpage&pagename=${config.appName}-${fileName}`
 }
