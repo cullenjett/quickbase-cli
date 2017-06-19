@@ -1,10 +1,10 @@
 # QuickBase CLI
 [![npm version](https://badge.fury.io/js/quickbase-cli.svg)](https://badge.fury.io/js/quickbase-cli)
 
-Simple command line tool for uploading local files to a QuickBase application.
+Writing custom code inside QuickBase sucks. Copy/pasting from your editor sucks. This simple command line tool lets you easily upload your local code files to a QuickBase application so you don't have to do either of those.
 
 ### Installation
-Requirements: [Node.js](https://nodejs.org/en/) >=4.x (?) and [Git](https://git-scm.com/).
+Requirements: [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/).
 
 ```bash
 npm install -g quickbase-cli
@@ -23,7 +23,38 @@ There are three commands available for quickbase-cli:
 qb init
 ```
 
-Initialize an existing app with quickbase-cli functionality. Respond to the prompts to create a `quickbase-cli.config.js` file, which is later used during the `qb deploy` command. Run this command from the root of your application, as the file will be placed wherever the command is run. See the [Notes](#notes) below for an alternative for entering your password as plain text.
+Initialize an existing app with quickbase-cli functionality. Respond to the prompts to create a config file called  `quickbase-cli.config.js` which is used by other quickbase-cli commands. Below are the prompts:
+
+```javascript
+{
+  name: 'username',
+  message: 'QuickBase username:'
+},
+{
+  name: 'password',
+  message: 'QuickBase password (Leave blank to use the QUICKBASE_CLI_PASSWORD env variable):'
+},
+{
+  name: 'dbid',
+  message: 'Main DBID for the QuickBase application:'
+},
+{
+  name: 'realm',
+  message: 'QuickBase realm:'
+},
+{
+  name: 'appToken',
+  message: 'QuickBase application token (if applicable):'
+},
+{
+  name: 'appName',
+  message: 'Code page prefix (leave blank to disable prefixing uploaded pages):'
+}
+```
+
+Run `qb init` from the root of your application, as the config file will be placed wherever the command is run.
+
+See the [Notes](#notes) below for an important advisory re: entering your QuickBase password when prompted.
 
 #### qb deploy
 ```bash
@@ -32,13 +63,16 @@ qb deploy [options] <file path or directory>
 # example
 qb deploy -w app/index.js
 qb deploy -x dist/
+qb deploy -wx build/bundle.js
 ```
 
-This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in the `quickbase-cli.config.js` file in the root of the application. In addition, the `appName` from `quickbase-ci.config.js` will be prepended to all uploaded files (ex: 'my-app-name-bundle.js', 'my-app-name-index.html'). **If no `<file path or directory>` is given then the current directory will be deployed.**
+This will upload the file(s) at `<file path or directory>` to the QuickBase application configured in `quickbase-cli.config.js`. In addition, the value for `appName` in `quickbase-ci.config.js` will be prepended to all uploaded files (ex: if  `appName='demo'` then 'demo-bundle.js', 'demo-index.html', and 'demo-bundle.css' might be example output file names). If you don't want to prepend anything to your uploaded files leave this field empty.
 
-There are two optional flags that can be passed to qb deploy:
+**If no `<file path or directory>` is given then the current directory will be deployed.**
+
+There are two optional flags that can be passed to qb deploy. You can use them individually or multiple at a time:
 - `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change.
-- `-x` (or `--replace`): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls.
+- `-x` (or `--replace`): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls (`<script src="realm.quickbase.com/db/dbayemay?a=dbpage&pageID=123"></script>`)
 
 #### qb new
 ```bash

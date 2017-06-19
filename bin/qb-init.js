@@ -13,7 +13,7 @@ const QUESTIONS = [
   {
     type: 'password',
     name: 'password',
-    message: 'QuickBase password (Leave blank to use the QUICKBASE_CLI_PASSWORD env variable):'
+    message: 'QuickBase password (leave blank to use the QUICKBASE_CLI_PASSWORD environment variable):'
   },
   {
     type: 'input',
@@ -28,12 +28,12 @@ const QUESTIONS = [
   {
     type: 'input',
     name: 'appToken',
-    message: 'QuickBase application token:'
+    message: 'QuickBase application token (if applicable):'
   },
   {
     type: 'input',
     name: 'appName',
-    message: 'Code page prefix:'
+    message: 'Code page prefix (leave blank to disable prefixing uploaded pages):'
   }
 ]
 
