@@ -71,7 +71,7 @@ This will upload the file(s) at `<file path or directory>` to the QuickBase appl
 **If no `<file path or directory>` is given then the current directory will be deployed.**
 
 There are two optional flags that can be passed to qb deploy. You can use them individually or multiple at a time:
-- `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change.
+- `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change. After the initial deploy only the file that changes will be uploaded to QuickBase.
 - `-x` (or `--replace`): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls (`<script src="realm.quickbase.com/db/dbayemay?a=dbpage&pageID=123"></script>`)
 
 #### qb new

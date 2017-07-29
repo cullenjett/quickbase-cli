@@ -28,7 +28,7 @@ if (program.watch) {
 
   watch(sourceArg, {}).on('change', (fileName) => {
     console.log(`\nChange detected in ${fileName}. Deploying...`)
-    qbDeploy(sourceArg)
+    qbDeploy(fileName)
   })
 }
 
