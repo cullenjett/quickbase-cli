@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-let fs = require('fs')
-let generateConfig = require('../lib/generate-config')
-let inquirer = require('inquirer')
+let fs = require('fs');
+let generateConfig = require('../lib/generate-config');
+let inquirer = require('inquirer');
 
 const QUESTIONS = [
   {
@@ -13,7 +13,8 @@ const QUESTIONS = [
   {
     type: 'password',
     name: 'password',
-    message: 'QuickBase password (leave blank to use the QUICKBASE_CLI_PASSWORD environment variable):'
+    message:
+      'QuickBase password (leave blank to use the QUICKBASE_CLI_PASSWORD environment variable):'
   },
   {
     type: 'input',
@@ -33,18 +34,23 @@ const QUESTIONS = [
   {
     type: 'input',
     name: 'appName',
-    message: 'Code page prefix (leave blank to disable prefixing uploaded pages):'
+    message:
+      'Code page prefix (leave blank to disable prefixing uploaded pages):'
   }
-]
+];
 
-qbInit()
+qbInit();
 
 function qbInit() {
-  inquirer.prompt(QUESTIONS).then(answers => {
-    return generateConfig(answers)
-  }).then(() => {
-    console.log('quickbase-cli.config.js generated successfuly.')
-  }).catch(err => {
-    console.error(err)
-  })
+  inquirer
+    .prompt(QUESTIONS)
+    .then(answers => {
+      return generateConfig(answers);
+    })
+    .then(() => {
+      console.log('quickbase-cli.config.js generated successfuly.');
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }

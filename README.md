@@ -3,27 +3,30 @@
 
 Writing custom code inside QuickBase sucks. Copy/pasting from your editor sucks. This simple command line tool lets you easily upload your local code files to a QuickBase application so you don't have to do either of those.
 
-### Installation
-Requirements: [Node.js](https://nodejs.org/en/) and [Git](https://git-scm.com/).
+## Installation
+Requirements: [Node.js](https://nodejs.org/en/) >= 8
 
 ```bash
 npm install -g quickbase-cli
 ```
 
-### Usage
-quickbase-cli can be used on it's own for basic QuickBase code pages, or in conjunction with modern cli tools (angular cli, create-react-app, vue cli, etc.) for an improved QuickBase development workflow.
+## Usage
+quickbase-cli can be used for basic QuickBase code page development. It's possible to use quickbase-cli with modern SPA cli tools (angular cli, create-react-app, vue cli, etc.), but there are some pretty significant caveats. Check out the `qb deploy` command options (`-x` specifically) for details.
 
 There are three commands available for quickbase-cli:
 - qb init
 - qb deploy
 - qb new
 
-#### qb init
+### qb init
 ```bash
 qb init
 ```
+**This is required in order to use the `qb deploy` command.**
 
-Initialize an existing app with quickbase-cli functionality. Respond to the prompts to create a config file called  `quickbase-cli.config.js` which is used by other quickbase-cli commands. Below are the prompts:
+Initialize an existing app with quickbase-cli functionality. Respond to the prompts to create a config file called  `quickbase-cli.config.js` which is used by other quickbase-cli commands. Run `qb init` from the root of your application, as the config file will be placed wherever the command is run.
+
+Below are the prompts (see the [Notes](#notes) below for an important advisory re: entering your QuickBase password when prompted):
 
 ```javascript
 {
@@ -52,15 +55,11 @@ Initialize an existing app with quickbase-cli functionality. Respond to the prom
 }
 ```
 
-Run `qb init` from the root of your application, as the config file will be placed wherever the command is run.
-
-See the [Notes](#notes) below for an important advisory re: entering your QuickBase password when prompted.
-
-#### qb deploy
+### qb deploy
 ```bash
 qb deploy [options] <file path or directory>
 
-# example
+# examples
 qb deploy -w app/index.js
 qb deploy -x dist/
 qb deploy -wx build/bundle.js
@@ -70,11 +69,13 @@ This will upload the file(s) at `<file path or directory>` to the QuickBase appl
 
 **If no `<file path or directory>` is given then the current directory will be deployed.**
 
-There are two optional flags that can be passed to qb deploy. You can use them individually or multiple at a time:
-- `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change. After the initial deploy only the file that changes will be uploaded to QuickBase.
-- `-x` (or `--replace`): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls (`<script src="realm.quickbase.com/db/dbayemay?a=dbpage&pageID=123"></script>`)
+**THAT WAS AN IMPORTANT FACT, PAY ATTENTION WHEN RUNNING `qb deploy` -- DON'T UPLOAD YOUR NODE_MODULES DIRECTORY TO QUICKBASE...**
 
-#### qb new
+There are two optional flags that can be passed to `qb deploy`. You can use them individually or multiple at a time:
+- `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change. After the initial deploy only the file that changes will be uploaded to QuickBase.
+- `-x` (or `--replace`): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls (`<script src="realm.quickbase.com/db/dbayemay?a=dbpage&pageID=123"></script>`). **Only .html files will have asset paths replaced, which means any asset paths inside your javascript (including React `<img />` src attributes) won't be replaced.** This is a good chunk of effort to implement efficiently, so I'll leave that as a potential path to greatness for anyone willing to put in the effort (PRs are always welcome).
+
+### qb new (mostly useless)
 ```bash
 qb new <github-repo> <project-name>
 
@@ -87,8 +88,10 @@ This command will start a new application by cloning a Github repo from `<github
 For now this is only a wrapper around `git clone`. After you pull down a repo you will need to run `qb init` if the app doesn't have a `quickbase-cli.config.js` file in it already. The end goal is to have starter-template repos available for quick and easy kick off.
 
 
-### Notes
+## Notes
 
 * Instead of exposing your password for the `quickbase-cli.config.js` file you can rely on an environment variable called `QUICKBASE_CLI_PASSWORD`. If you have that variable defined and leave the `password` empty when prompted the `qb deploy` command will use it instead. Always practice safe passwords.
 
-* Moves are being made to add cool shit like a build process, global defaults, awesome starter templates, and pulling down existing code files from QuickBase. They're not out yet, so for now you're on your own.
+* ~~Moves are being made to add cool shit like a build process, global defaults, awesome starter templates, and pulling down existing code files from QuickBase. They're not out yet, so for now you're on your own.~~
+
+* I no longer work with QuickBase applications, so the cool shit I had planned won't happen unless someone submits some dope ass pull requests.
