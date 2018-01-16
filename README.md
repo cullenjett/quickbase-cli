@@ -11,7 +11,7 @@ npm install -g quickbase-cli
 ```
 
 ## Usage
-quickbase-cli can be used for basic QuickBase code page development. It's possible to use quickbase-cli with modern SPA cli tools (angular cli, create-react-app, vue cli, etc.), but there are some pretty significant caveats. Check out the `qb deploy` command options (`-x` specifically) for details.
+quickbase-cli can be used for basic QuickBase code page development. It's probably possible to use quickbase-cli with modern SPA cli tools (angular cli, create-react-app, vue cli, etc.), but I haven't actually tried it so let me know how it goes.
 
 There are three commands available for quickbase-cli:
 - qb init
@@ -72,8 +72,8 @@ This will upload the file(s) at `<file path or directory>` to the QuickBase appl
 **THAT WAS AN IMPORTANT FACT, PAY ATTENTION WHEN RUNNING `qb deploy` -- DON'T UPLOAD YOUR NODE_MODULES DIRECTORY TO QUICKBASE...**
 
 There are two optional flags that can be passed to `qb deploy`. You can use them individually or multiple at a time:
-- `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change. After the initial deploy only the file that changes will be uploaded to QuickBase.
-- `-x` (or `--replace`): If you pass a directory to `qb deploy` then all .html files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>` and/or `<link href="bundle.css"/>`) with their new QuickBase urls (`<script src="realm.quickbase.com/db/dbayemay?a=dbpage&pageID=123"></script>`). **Only .html files will have asset paths replaced, which means any asset paths inside your javascript (including React `<img />` src attributes) won't be replaced.** This is a good chunk of effort to implement efficiently, so I'll leave that as a potential path to greatness for anyone willing to put in the effort (PRs are always welcome).
+- `-w` (or `--watch`): watch for changes to `<file path or directory>` and deploy to QuickBase on change. After the initial deploy only the file that changes will be uploaded to QuickBase unless the `-x` flag is also passed, in which case the entire `<file path or directory>` source will be uploaded.
+- `-x` (or `--replace`): If you pass a directory to `qb deploy` then all files will run through a regex to replace asset file includes (i.e. `<script src="bundle.js"></script>`, `<link href="bundle.css"/>`, etc.) with their new QuickBase urls (`<script src="realm.quickbase.com/db/dbayemay?a=dbpage&pageID=123"></script>`). This is in no way an optimized command, so I'd avoid running it on YUGE directories.
 
 ### qb new (mostly useless)
 ```bash
@@ -94,4 +94,4 @@ For now this is only a wrapper around `git clone`. After you pull down a repo yo
 
 * ~~Moves are being made to add cool shit like a build process, global defaults, awesome starter templates, and pulling down existing code files from QuickBase. They're not out yet, so for now you're on your own.~~
 
-* I no longer work with QuickBase applications, so the cool shit I had planned won't happen unless someone submits some dope ass pull requests.
+* I no longer work with QuickBase applications, so the cool shit I had planned won't happen unless someone submits some dope pull requests.

@@ -7,9 +7,13 @@ const fs = require('fs');
 const path = require('path');
 const program = require('commander');
 const watch = require('chokidar').watch;
+const util = require('util');
 
 const ApiClient = require('../lib/api');
 const { getFiles } = require('../lib/get-files');
+
+const readFile = util.promisify(fs.readFile);
+const stat = util.promisify(fs.stat);
 
 program
   .option('-w, --watch', 'deploy files on change')
@@ -30,13 +34,18 @@ if (program.watch) {
   console.log(`Watching for file changes in ${sourceArg}`);
 
   watch(sourceArg, {}).on('change', fileName => {
-    console.log(`\nChange detected in ${fileName}. Deploying...`);
-    qbDeploy(fileName);
+    console.log(`\nChange detected in ${fileName}`);
+    program.replace
+      ? qbDeploy(sourceArg)
+      : qbDeploy(fileName);
   });
 }
 
-function qbDeploy(source) {
-  let isFile = fs.statSync(source).isFile();
+async function qbDeploy(source) {
+  console.log('Uploading files to QuickBase...');
+
+  const stats = await fs.statSync(source);
+  const isFile = stats.isFile();
 
   if (isFile) {
     return uploadToQuickbase(source)
@@ -48,24 +57,14 @@ function qbDeploy(source) {
 
   if (!isFile) {
     getFiles(source).then(files => {
-      const { htmlFiles, assetFiles } = files;
+      const uploadPromises = program.replace
+        ? files.map(file => replaceUrlsAndUpload(file, files))
+        : files.map(file => uploadToQuickbase(file));
 
-      const uploadHtmlFiles = program.replace
-        ? replaceUrlsAndUpload(htmlFiles, assetFiles)
-        : htmlFiles.map(htmlFile => uploadToQuickbase(htmlFile));
-
-      const uploadAssetFiles = assetFiles.map(assetFile =>
-        uploadToQuickbase(assetFile)
-      );
-
-      const uploadAllFiles = uploadHtmlFiles.concat(uploadAssetFiles);
-
-      return Promise.all(uploadAllFiles)
+      return Promise.all(uploadPromises)
         .then(res =>
           console.log(
-            `Successfully uploaded to QuickBase:\n=> ${htmlFiles
-              .concat(assetFiles)
-              .join('\n=> ')}`
+            `Successfully uploaded to QuickBase:\n=> ${files.join('\n=> ')}`
           )
         )
         .catch(err => console.error(err));
@@ -90,23 +89,22 @@ function uploadToQuickbase(file, fileContents) {
   return api.uploadPage(codePageName, fileContents);
 }
 
-function replaceUrlsAndUpload(htmlFiles, assetFiles) {
-  return htmlFiles.map(htmlFile => {
-    let htmlContent = fs.readFileSync(htmlFile, 'utf-8');
+async function replaceUrlsAndUpload(file, allFiles) {
+  let fileContents = await readFile(file, 'utf-8');
 
-    assetFiles.forEach(assetFile => {
+  allFiles.forEach(assetFile => {
+    if (file !== assetFile) {
       const fileName = path.basename(assetFile);
       const regex = new RegExp(`("|')[^"]*${fileName}("|')`, 'g');
 
-      htmlContent = htmlContent.replace(
+      fileContents = fileContents.replace(
         regex,
         generateCustomPageUrl(path.basename(assetFile))
       );
-    });
-
-    console.log(htmlContent);
-    return uploadToQuickbase(htmlFile, htmlContent);
+    }
   });
+
+  return uploadToQuickbase(file, fileContents);
 }
 
 function generateCustomPageUrl(fileName) {
