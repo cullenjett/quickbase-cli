@@ -43,7 +43,14 @@ if (program.watch) {
 
 async function qbDeploy(source) {
   console.log('Uploading files to QuickBase...');
-
+  
+  try {
+    await api.authenticateIfNeeded();
+  } catch(e) {
+    console.error(e);
+    return;
+  }
+  
   const stats = await fs.statSync(source);
   const isFile = stats.isFile();
 
