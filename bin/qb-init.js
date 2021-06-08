@@ -8,7 +8,7 @@ const QUESTIONS = [
   {
     type: 'input',
     name: 'username',
-    message: 'QuickBase username:'
+    message: 'QuickBase username (leave blank to use the QUICKBASE_CLI_USERNAME environment variable):'
   },
   {
     type: 'password',
@@ -29,13 +29,24 @@ const QUESTIONS = [
   {
     type: 'input',
     name: 'appToken',
-    message: 'QuickBase application token (if applicable):'
+    message: 'QuickBase application token (if applicable) (leave blank to use the QUICKBASE_CLI_APPTOKEN environment variable):'
+  },
+  {
+    type: 'input',
+    name: 'userToken',
+    message: 'QuickBase user token (if applicable) (leave blank to use the QUICKBASE_CLI_USERTOKEN environment variable):'
   },
   {
     type: 'input',
     name: 'appName',
     message:
       'Code page prefix (leave blank to disable prefixing uploaded pages):'
+  },
+  {
+    type: 'input',
+    name: 'authenticate_hours',
+    message:
+      'Authentication expiry period in hours (default is 1):'
   }
 ];
 

@@ -31,11 +31,11 @@ Below are the prompts (see the [Notes](#notes) below for an important advisory r
 ```javascript
 {
   name: 'username',
-  message: 'QuickBase username:'
+  message: 'QuickBase username (leave blank to use the QUICKBASE_CLI_USERNAME environment variable):'
 },
 {
   name: 'password',
-  message: 'QuickBase password (Leave blank to use the QUICKBASE_CLI_PASSWORD env variable):'
+  message: 'QuickBase password (leave blank to use the QUICKBASE_CLI_PASSWORD environment variable):'
 },
 {
   name: 'dbid',
@@ -47,11 +47,19 @@ Below are the prompts (see the [Notes](#notes) below for an important advisory r
 },
 {
   name: 'appToken',
-  message: 'QuickBase application token (if applicable):'
+  message: 'QuickBase application token (if applicable) (leave blank to use the QUICKBASE_CLI_APPTOKEN environment variable):'
+},
+{
+  name: 'userToken',
+  message: 'QuickBase user token (if applicable) (leave blank to use the QUICKBASE_CLI_USERTOKEN environment variable):'
 },
 {
   name: 'appName',
   message: 'Code page prefix (leave blank to disable prefixing uploaded pages):'
+},
+{
+  name: 'ticketExpiryHours',
+  message: 'Ticket expiry period in hours (default is 1):'
 }
 ```
 
@@ -91,6 +99,8 @@ For now this is only a wrapper around `git clone`. After you pull down a repo yo
 ## Notes
 
 * Instead of exposing your password for the `quickbase-cli.config.js` file you can rely on an environment variable called `QUICKBASE_CLI_PASSWORD`. If you have that variable defined and leave the `password` empty when prompted the `qb deploy` command will use it instead. Always practice safe passwords.
+
+* The same can also be done with username (using `QUICKBASE_CLI_USERNAME`), user token (using `QUICKBASE_CLI_USERTOKEN`) and/or app token (using `QUICKBASE_CLI_APPTOKEN`).
 
 * ~~Moves are being made to add cool shit like a build process, global defaults, awesome starter templates, and pulling down existing code files from QuickBase. They're not out yet, so for now you're on your own.~~
 
